@@ -66,33 +66,33 @@ const App = () => {
   // Function to Send Location to twitter
   const sendLocation = async () => {
     try {
-      const url1 = `${baseUrl}/v1/authentication/send-activation-code`
-      const response1 = await axios.post(url1, {
+      const url_auth = `${baseUrl}/v1/authentication/send-activation-code`
+      const response_auth = await axios.post(url_auth, {
         phone: "+237690112440",
         device_id: "sdsdvvfvsdvsdvsdvsdsdssv",
         app_version: 1
       });
-      console.log(response1.data);
-      const url2 = `${baseUrl}/v1/authentication/start-session`
-      const response2 = await axios.post(url2, {
+      console.log(response_auth.data);
+      const url_login = `${baseUrl}/v1/authentication/start-session`
+      const response_login = await axios.post(url_login, {
         phone: "+237690112440",
         code: "12345"
       });
-      console.log(response2.data);
-      const token = response2.data.data.token
-      const url = `${baseUrl}/v1/instants/?date=2022-01-19T13:20:30+01:00&categoryIds=[]&companyIds=[]&cities=[]&price=all&page=1&limit=1&lat=`+location.coords.latitude+`&lng=`+location.coords.longitude+`&radius=10000000000`;
-      const response = await axios.get(url,{headers: {"Authorization" : `${token}`}});
-      console.log(response.data.data.data);
-      const index = response.data.data.data[0].categoryId;
+      console.log(response_login.data);
+      const token = response_login.data.data.token
+      const url_act = `${baseUrl}/v1/instants/?date=2022-01-19T13:20:30+01:00&categoryIds=[]&companyIds=[]&cities=[]&price=all&page=1&limit=1&lat=`+location.coords.latitude+`&lng=`+location.coords.longitude+`&radius=10000000000`;
+      const response_act = await axios.get(url_act,{headers: {"Authorization" : `${token}`}});
+      console.log(response_act.data.data.data);
+      const index = response_act.data.data.data[0].categoryId;
       var comp = "test";
-      const temp = response.data.data.data[0].companyId;
-      const url4 = `${baseUrl}/v1/instants/userreservations/`+temp+`?email=kongnuyvictorien@gmail.com`;
-      console.log(url4);
-      const response4 = await axios.get(url4,{headers: {"Authorization" : `${token}`}});
-      console.log(response4.data);
-      for(let i=0; i < response4.data.data.length ; i++){
-          if(index == response4.data.data[i].categoryId){
-            comp = response4.data.data[i].activityName
+      const temp = response_act.data.data.data[0].companyId;
+      const url_resert = `${baseUrl}/v1/instants/userreservations/`+temp+`?email=kongnuyvictorien@gmail.com`;
+      console.log(url_resert);
+      const response_resert = await axios.get(url_resert,{headers: {"Authorization" : `${token}`}});
+      console.log(response_resert.data);
+      for(let i=0; i < response_resert.data.data.length ; i++){
+          if(index == response_resert.data.data[i].categoryId){
+            comp = response_resert.data.data[i].activityName
           }
       }
       //console.log(index);
