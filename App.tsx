@@ -80,20 +80,34 @@ const App = () => {
       });
       console.log(response_login.data);
       const token = response_login.data.data.token
+      var comp = "test";
       const url_act = `${baseUrl}/v1/instants/?date=2022-01-19T13:20:30+01:00&categoryIds=[]&companyIds=[]&cities=[]&price=all&page=1&limit=1&lat=`+location.coords.latitude+`&lng=`+location.coords.longitude+`&radius=10000000000`;
       const response_act = await axios.get(url_act,{headers: {"Authorization" : `${token}`}});
       console.log(response_act.data.data.data);
-      const index = response_act.data.data.data[0].categoryId;
-      var comp = "test";
-      const temp = response_act.data.data.data[0].companyId;
-      const url_resert = `${baseUrl}/v1/instants/userreservations/`+temp+`?email=kongnuyvictorien@gmail.com`;
-      console.log(url_resert);
-      const response_resert = await axios.get(url_resert,{headers: {"Authorization" : `${token}`}});
-      console.log(response_resert.data);
-      for(let i=0; i < response_resert.data.data.length ; i++){
-          if(index == response_resert.data.data[i].categoryId){
-            comp = response_resert.data.data[i].activityName
+      if(response_act.data.data.data.length != 0){
+        var k=0;
+        for(let i=0; i < response_act.data.data.data.length; i++){
+          const index = response_act.data.data.data[i].categoryId;
+          const temp = response_act.data.data.data[k].companyId;
+          const url_resert = `${baseUrl}/v1/instants/userreservations/`+temp+`?email=kongnuyvictorien@gmail.com`;
+          //console.log(url_resert);
+          const response_resert = await axios.get(url_resert,{headers: {"Authorization" : `${token}`}});
+          console.log(response_resert.data);
+          for(let j=0; j < response_resert.data.data.length ; j++){
+              if(index == response_resert.data.data[j].categoryId){
+                comp = response_resert.data.data[j].activityName
+              }
           }
+          if(i == response_act.data.data.data.length - 1){
+            k=k+1;
+            i = -1;
+          }
+          if(k >= response_act.data.data.data.length - 1){
+            break;
+          }
+        }
+      }else{
+        comp = "la liste des activités proches est vide"
       }
       //console.log(index);
       //console.log(comp);
